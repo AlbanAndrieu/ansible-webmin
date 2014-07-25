@@ -1,6 +1,6 @@
 # ansible-webmin
 
-A role for creating webmin tasks.
+A role for installing webmin.
 
 
 ## Actions
@@ -11,7 +11,7 @@ A role for creating webmin tasks.
 ## Usage:
 ```
   # This playbook can be run using vagrant (on virtual box). 
-  - name: apply webmin to all nodes
+  - name: Install webmin
     hosts: webmin
     user: root
   #  connection: local

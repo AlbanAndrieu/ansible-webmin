@@ -1,6 +1,20 @@
 ---
 # This playbook contains common plays that will be run on all nodes.
 
+#If Debian complains about missing dependencies, you can install them with the command
+#- name: Install webmin dependencies
+#  apt: pkg={{ item }} state=present update_cache=yes
+#  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+#  with_items:
+#   - perl 
+#   - libnet-ssleay-perl 
+#   - openssl
+#   - libauthen-pam-perl 
+#   - libpam-runtime 
+#   - libio-pty-perl 
+#   - apt-show-versions 
+#   - python
+   
 - name: Add webmin repo 
   apt_repository: repo='deb http://download.webmin.com/download/repository sarge contrib' update_cache=yes
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
@@ -12,3 +26,9 @@
 - name: Addkey webmin
   apt_key: url=http://www.webmin.com/jcameron-key.asc  state=present
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Install webmin
+  apt: pkg={{ item }} state=present update_cache=yes
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  with_items:
+   - webmin
