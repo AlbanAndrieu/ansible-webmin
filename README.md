@@ -1,25 +1,35 @@
-# ansible-webmin
+ansible-webmin
+====================
 
 A role for installing webmin.
 
+[![Build Status](https://api.travis-ci.org/AlbanAndrieu/ansible-webmin.png?branch=master)](https://travis-ci.org/AlbanAndrieu/ansible-webmin)
 
 ## Actions
 
 - Ensures that webmin is installed (using `apt`)
 
+Usage example
+------------
 
-## Usage:
-```
-  # This playbook can be run using vagrant (on virtual box). 
-  - name: Install webmin
-    hosts: webmin
-    user: root
-  #  connection: local
+    - name: Install webmin
+      hosts: webmin
+      user: root
     
-    roles:
-      - webmin      
-```
+      roles:
+        - webmin      
 
-## License
+Requirements
+------------
+
+none
+
+Dependencies
+------------
+
+none
+
+License
+-------
 
 MIT
