@@ -33,3 +33,7 @@ License
 -------
 
 MIT
+
+#### Feedback, bug-reports, requests, ...
+
+Are [welcome](https://github.com/AlbanAndrieu/ansible-webmin/issues)!
