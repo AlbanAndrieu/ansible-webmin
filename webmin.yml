@@ -1,10 +1,9 @@
 ---
 - hosts: all
-  sudo: True
+  sudo: true
   roles:
-    - ansible-webmin
-     
-  vars:     
-       docker_files_generated_directory         : ""  
-       
+    - { role: ./,
+        docker_files_enable: yes    
+      }
 
+#- include: docker/integration-tests.yml

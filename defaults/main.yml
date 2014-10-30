@@ -1,2 +1,10 @@
 ---
 webmin_enabled: yes                       # Enable module
+
+webmin_base_dir: "/usr/share/webmin"
+
+docker_files_generated_directory: "./"
+docker_files_enable: no
+docker_volume_directory: "{{ webmin_base_dir }}"
+docker_working_directory: "/home/vagrant"
+docker_image_name: "nabla/ansible-webmin"
