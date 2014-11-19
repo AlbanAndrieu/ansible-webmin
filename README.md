@@ -7,7 +7,9 @@ which can be used to setup your environement on hosts.
 
 ### Installation
 
-This role requires at least Ansible `v1.6.3`. To install it, run:
+This role requires at least Ansible `v1.6.3`. 
+
+To install it, run:
 
     ansible-galaxy install alban.andrieu.webmin
 
