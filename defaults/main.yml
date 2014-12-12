@@ -1,4 +1,3 @@
----
 webmin_enabled: yes                       # Enable module
 
 webmin_base_dir: "/usr/share/webmin"
