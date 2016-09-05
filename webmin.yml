@@ -1,9 +1,9 @@
 ---
 - hosts: all
-  sudo: true
+  become: true
   roles:
     - { role: ./,
-        docker_files_enable: yes    
+        docker_files_enable: yes
       }
 
 #- include: docker/integration-tests.yml
