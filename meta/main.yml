@@ -6,7 +6,7 @@ galaxy_info:
   description: A role for installing webmin
   company: Nabla
   license: GPLv3
-  min_ansible_version: 1.6.3
+  min_ansible_version: 2.1.1
   platforms:
   - name: Ubuntu
     versions:
@@ -22,27 +22,3 @@ galaxy_info:
     - trusty
   categories:
   - system
-
-ansigenome_info:
-  galaxy_id: '1173'
-  galaxy_user: 'alban.andrieu'
-  galaxy_name: 'webmin'
-  
-  travis: True
-
-  authors:
-    - name:  'Alban Andrieu'
-      url: 'fr.linkedin.com/in/nabla/'
-      email: 'alban.andrieu@free.fr'
-      twitter: 'AlbanAndrieu'
-      github: 'AlbanAndrieu'
-
-  synopsis: |
-    This ``Simple`` role allows you to install [Webmin](http://www.webmin.com) service
-    which can be used to setup your environement on hosts.   
-
-  usage: |
-    Describe how to use in more detail...
-
-  #custom: |
-  #  Any custom output you want after the usage section..
