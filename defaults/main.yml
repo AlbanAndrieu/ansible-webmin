@@ -7,3 +7,6 @@ docker_files_enable: no
 docker_volume_directory: "{{ webmin_base_dir }}"
 docker_working_directory: "/home/vagrant"
 docker_image_name: "nabla/ansible-webmin"
+
+webmin_repo_files :
+  - "webmin_mirror_somersettechsolutions_co_uk_repository.list"

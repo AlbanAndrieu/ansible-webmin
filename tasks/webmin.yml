@@ -6,29 +6,40 @@
 #  apt: pkg={{ item }} state=present update_cache=yes
 #  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 #  with_items:
-#   - perl 
-#   - libnet-ssleay-perl 
+#   - perl
+#   - libnet-ssleay-perl
 #   - openssl
-#   - libauthen-pam-perl 
-#   - libpam-runtime 
-#   - libio-pty-perl 
-#   - apt-show-versions 
+#   - libauthen-pam-perl
+#   - libpam-runtime
+#   - libio-pty-perl
+#   - apt-show-versions
 #   - python
-   
-- name: webmin | Add webmin repo 
+
+- name: webmin | Add webmin repo
   apt_repository: repo='deb http://download.webmin.com/download/repository sarge contrib' update_cache=yes
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-  
-- name: webmin | Add webmin mirror repo 
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  become: yes
+
+- name: webmin | Add webmin mirror repo
   apt_repository: repo='deb http://webmin.mirror.somersettechsolutions.co.uk/repository sarge contrib' update_cache=yes
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-    
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  become: yes
+
 - name: webmin | Addkey webmin
   apt_key: url=http://www.webmin.com/jcameron-key.asc  state=present
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  become: yes
 
 - name: webmin | Install webmin
-  apt: pkg={{ item }} state=present update_cache=yes
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  action: "{{ ansible_pkg_mgr}} name={{ item }} update_cache=yes state={{ webmin_pkg_state|default('present') }}"
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   with_items:
    - webmin
+  become: yes
+
+- name: Remove duplicate entry.
+  file: name=/etc/apt/sources.list.d/{{ item }} state=absent
+  become: yes
+  when: ( ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' )
+  with_items: webmin_repo_files
+
