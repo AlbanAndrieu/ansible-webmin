@@ -22,7 +22,7 @@
 
 - name: webmin | Add webmin mirror repo
   apt_repository: repo='deb http://webmin.mirror.somersettechsolutions.co.uk/repository sarge contrib' update_cache=yes
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['16.04']
   become: yes
 
 - name: webmin | Addkey webmin
