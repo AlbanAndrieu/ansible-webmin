@@ -32,7 +32,6 @@
 
 - name: webmin | Install webmin
   action: "{{ ansible_pkg_mgr}} name={{ item }} update_cache=yes state={{ webmin_pkg_state|default('present') }}"
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   with_items:
    - webmin
   become: yes
