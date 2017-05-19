@@ -35,6 +35,22 @@
   with_items:
    - webmin
   become: yes
+  
+- name: webmin | Install Webmin
+  pkgutil: name={{ item }} state=present
+  when: ((ansible_distribution == 'Solaris') and (ansible_distribution_version not in ['11.1']))
+  with_items:
+   - SUNWwebminr  
+   
+#- name: webmin | Setup webmin
+#  command: /usr/sfw/lib/webmin/setup.sh
+#  when: ((ansible_distribution == 'Solaris') and (ansible_distribution_version not in ['11.1']))  
+#  become: yes
+
+#- name: webmin | Enable webmin
+#  command: /usr/sbin/svcadm enable webmin
+#  when: ((ansible_distribution == 'Solaris') and (ansible_distribution_version not in ['11.1']))  
+#  become: yes
 
 - name: Remove duplicate entry.
   file: name=/etc/apt/sources.list.d/{{ item }} state=absent
