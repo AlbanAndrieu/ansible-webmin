@@ -29,6 +29,7 @@
   apt_repository: repo='deb http://webmin.mirror.somersettechsolutions.co.uk/repository {{ansible_lsb.codename}} contrib' update_cache=yes
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['17.04']
   become: yes
+  ignore_errors: true
 
 - name: webmin | Install webmin
   action: "{{ ansible_pkg_mgr}} name={{ item }} state={{ webmin_pkg_state|default('present') }}"
