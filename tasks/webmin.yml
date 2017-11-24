@@ -2,18 +2,24 @@
 # This playbook contains common plays that will be run on all nodes.
 
 #If Debian complains about missing dependencies, you can install them with the command
-#- name: webmin | Install webmin dependencies
-#  apt: pkg={{ item }} state=present update_cache=yes
-#  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-#  with_items:
-#   - perl
-#   - libnet-ssleay-perl
-#   - openssl
-#   - libauthen-pam-perl
-#   - libpam-runtime
-#   - libio-pty-perl
-#   - apt-show-versions
-#   - python
+- name: webmin | Install webmin dependencies
+  action: "{{ ansible_pkg_mgr}} name={{ item }} state={{ webmin_pkg_state|default('present') }}"
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  with_items:
+   - perl
+   - libnet-ssleay-perl
+   - openssl
+   - libauthen-pam-perl
+   - libpam-runtime
+   - libio-pty-perl
+   - apt-show-versions
+   - python
+
+- name: webmin | Install webmin dependencies
+  action: "{{ ansible_pkg_mgr}} name={{ item }} state={{ webmin_pkg_state|default('present') }}"
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  with_items:
+   - apt-transport-https
 
 - name: webmin | Addkey webmin
   apt_key: url=http://www.webmin.com/jcameron-key.asc state=present
@@ -23,7 +29,8 @@
 - name: webmin | Add webmin repo
 #  apt_repository: repo='deb http://download.webmin.com/download/repository {{ansible_lsb.codename}} contrib' update_cache=yes
   apt_repository: repo='deb http://download.webmin.com/download/repository sarge contrib' update_cache=yes
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['14.04','17.04']
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') 
+#  and ansible_distribution_version not in ['17.04']
   become: yes
 
 - name: webmin | Add webmin mirror repo
