@@ -27,8 +27,8 @@
   become: yes
 
 - name: webmin | Add webmin repo
-#  apt_repository: repo='deb http://download.webmin.com/download/repository {{ansible_lsb.codename}} contrib' update_cache=yes
-  apt_repository: repo='deb http://download.webmin.com/download/repository sarge contrib' update_cache=yes
+#  apt_repository: repo='deb https://download.webmin.com/download/repository {{ansible_lsb.codename}} contrib' update_cache=yes
+  apt_repository: repo='deb https://download.webmin.com/download/repository sarge contrib' update_cache=yes
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') 
 #  and ansible_distribution_version not in ['17.04']
   become: yes
@@ -40,8 +40,8 @@
   ignore_errors: true
 
 - name: webmin | Install webmin
-  action: "{{ ansible_pkg_mgr}} name={{ item }} state={{ webmin_pkg_state|default('present') }}"
-  when: ansible_distribution_version not in ['17.04']
+  action: "{{ ansible_pkg_mgr}} name={{ item }} state={{ webmin_pkg_state|default('present') }} update_cache=yes" 
+#  when: ansible_distribution_version not in ['17.04']
   with_items:
    - webmin
   become: yes
