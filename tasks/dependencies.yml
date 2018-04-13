@@ -1,0 +1,13 @@
+
+- name: webmin | Install webmin mandatory dependencies
+  action: "{{ ansible_pkg_mgr}} name={{ item }} state={{  util_pkg_state|default('present') }}"
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  with_items:
+   - apt-transport-https
+
+- name: webmin | Install webmin optional dependencies
+  action: "{{ ansible_pkg_mgr}} name={{ item }} state={{  util_pkg_state|default('present') }}"
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  with_items:
+   -  webalizer
+   -  fail2ban

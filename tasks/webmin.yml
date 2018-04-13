@@ -5,11 +5,7 @@
 
 - include: perl.yml
 
-- name: webmin | Install webmin dependencies
-  action: "{{ ansible_pkg_mgr}} name={{ item }} state={{  util_pkg_state|default('present') }}"
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  with_items:
-   - apt-transport-https
+- include: dependencies.yml
 
 - name: webmin | Addkey webmin
   apt_key: url=http://www.webmin.com/jcameron-key.asc state=present

@@ -13,6 +13,13 @@
    - libpam-runtime
    - libio-pty-perl
    - apt-show-versions
+   
+- name: webmin | Install webmin mysql dependencies
+  action: "{{ ansible_pkg_mgr}} name={{ item }} state={{  util_pkg_state|default('present') }}"
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  with_items:   
+   - libdbd-mysql-perl 
+   - libdbi-perl
 
 - name: jenkins-slave | Install perl for running
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }} update_cache=yes"
