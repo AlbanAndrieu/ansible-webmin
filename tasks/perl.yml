@@ -1,0 +1,82 @@
+
+##
+ # Perl
+ #
+- name: webmin | Install webmin dependencies
+  action: "{{ ansible_pkg_mgr}} name={{ item }} state={{  util_pkg_state|default('present') }}"
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  with_items:
+   - perl
+   - libnet-ssleay-perl
+   - openssl
+   - libauthen-pam-perl
+   - libpam-runtime
+   - libio-pty-perl
+   - apt-show-versions
+
+- name: jenkins-slave | Install perl for running
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ jenkins_pkg_state|default('present') }} update_cache=yes"
+  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or (ansible_distribution == 'RedHat' and not ansible_distribution_major_version == '6'))
+  tags: package
+  with_items:
+   - perl-Env
+  become: yes
+
+- name: jenkins-slave | Install cpanminus (RedHat based)
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ jenkins_pkg_state|default('present') }} update_cache=yes"
+  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or (ansible_distribution == 'RedHat' and not ansible_distribution_major_version == '6'))
+  tags: package
+  with_items:
+   - perl-App-cpanminus
+  become: yes
+
+- name: jenkins-slave | Install CPAN tools needed by cpp generator (RedHat based)
+  action: "{{ ansible_pkg_mgr}} name={{ item }} state={{ jenkins_pkg_state|default('present') }}"
+  become: yes
+  when: (ansible_distribution == 'RedHat')
+  with_items:
+   - perl-CPAN
+
+#export PERL_MM_USE_DEFAULT=1
+#export PERL_EXTUTILS_AUTOINSTALL="--defaultdeps"
+#sudo PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install Test::More'
+
+#It makes perl automatically answer "yes" when CPAN asks "Would you like to configure as much as possible automatically? [yes]"
+- name: jenkins-slave | Install automatically perl module PERL_MM_USE_DEFAULT
+  shell: "echo $PERL_MM_USE_DEFAULT"
+  environment:
+    PERL_MM_USE_DEFAULT: 1
+
+- name: jenkins-slave | Echo PERL_MM_USE_DEFAULT again
+  shell: "echo $PERL_MM_USE_DEFAULT"
+
+- name:  jenkins-slave | Check perl
+  shell: perl -e 'use FileHandle; print $FileHandle::VERSION'
+  changed_when: false
+  become: yes
+
+#TODO
+#See http://almtools/confluence/display/ENG/The+MGR+developer+server+changelog
+#AND
+#See http://almtools/confluence/display/ENG/MGR+CMR+Windows+environment+setup
+#TODO For windows
+#- cpanm:
+#    name: XML::DOM
+
+
+#TODO on Ubuntu configure cpan by hand
+#sudo perl -MCPAN -e 'install Bundle::CPAN'
+
+#Below is same has above but with CPAN
+- name:  jenkins-slave | Install cpan perl modules needed by mysql webmin
+  shell: "cpan {{ item }}"
+  with_items:
+    - DBI 
+    - DBD::mysql
+  register: cpan_result
+  changed_when: false
+  become: yes
+
+- name: jenkins-slave | Run perl cpan check
+  shell: perl -MLWP::Simple -e 1
+  when: cpan_result.changed

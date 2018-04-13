@@ -2,18 +2,8 @@
 # This playbook contains common plays that will be run on all nodes.
 
 #If Debian complains about missing dependencies, you can install them with the command
-- name: webmin | Install webmin dependencies
-  action: "{{ ansible_pkg_mgr}} name={{ item }} state={{  util_pkg_state|default('present') }}"
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  with_items:
-   - perl
-   - libnet-ssleay-perl
-   - openssl
-   - libauthen-pam-perl
-   - libpam-runtime
-   - libio-pty-perl
-   - apt-show-versions
-   - python
+
+- include: perl.yml
 
 - name: webmin | Install webmin dependencies
   action: "{{ ansible_pkg_mgr}} name={{ item }} state={{  util_pkg_state|default('present') }}"
