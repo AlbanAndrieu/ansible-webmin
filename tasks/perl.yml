@@ -75,6 +75,19 @@
   changed_when: false
   become: yes
 
+
+- name:  jenkins-slave | Install cpan perl additional modules webmin
+  shell: "cpan {{ item }}"
+  with_items:
+    - DDigest::MD5
+    - Net::SSLeay
+  register: cpan_result
+  changed_when: false
+  become: yes
+
+#TODO test
+#perl -e 'use Net::SSLeay' 
+
 - name: jenkins-slave | Run perl cpan check
   shell: perl -MLWP::Simple -e 1
   when: cpan_result.changed
