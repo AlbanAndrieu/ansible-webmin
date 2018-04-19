@@ -21,7 +21,7 @@
    - libdbd-mysql-perl 
    - libdbi-perl
 
-- name: jenkins-slave | Install perl for running
+- name: webmin | Install perl for running
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }} update_cache=yes"
   when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or (ansible_distribution == 'RedHat' and not ansible_distribution_major_version == '6'))
   tags: package
@@ -29,7 +29,7 @@
    - perl-Env
   become: yes
 
-- name: jenkins-slave | Install cpanminus (RedHat based)
+- name: webmin | Install cpanminus (RedHat based)
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }} update_cache=yes"
   when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or (ansible_distribution == 'RedHat' and not ansible_distribution_major_version == '6'))
   tags: package
@@ -37,7 +37,7 @@
    - perl-App-cpanminus
   become: yes
 
-- name: jenkins-slave | Install CPAN tools needed by cpp generator (RedHat based)
+- name: webmin | Install CPAN tools needed by cpp generator (RedHat based)
   action: "{{ ansible_pkg_mgr}} name={{ item }} state={{ util_pkg_state|default('present') }}"
   become: yes
   when: (ansible_distribution == 'RedHat')
@@ -49,24 +49,34 @@
 #sudo PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install Test::More'
 
 #It makes perl automatically answer "yes" when CPAN asks "Would you like to configure as much as possible automatically? [yes]"
-- name: jenkins-slave | Install automatically perl module PERL_MM_USE_DEFAULT
+- name: webmin | Install automatically perl module PERL_MM_USE_DEFAULT
   shell: "echo $PERL_MM_USE_DEFAULT"
   environment:
     PERL_MM_USE_DEFAULT: 1
 
-- name: jenkins-slave | Echo PERL_MM_USE_DEFAULT again
+- name: webmin | Echo PERL_MM_USE_DEFAULT again
   shell: "echo $PERL_MM_USE_DEFAULT"
 
-- name:  jenkins-slave | Check perl
+- name:  webmin | Check perl
   shell: perl -e 'use FileHandle; print $FileHandle::VERSION'
   changed_when: false
   become: yes
+
+#pkg install p5\-DBI
+- name: webmin | Install perl modules needed by mysql webmin (Freebsd)
+  pkgng: name={{ item }} state={{ util_pkg_state|default('present') }}
+  become: yes
+  when: (ansible_distribution == 'FreeBSD') 
+  tags: package
+  with_items:
+   - p5\-DBI
+  changed_when: false
 
 #TODO on Ubuntu configure cpan by hand
 #sudo perl -MCPAN -e 'install Bundle::CPAN'
 
 #Below is same has above but with CPAN
-- name:  jenkins-slave | Install cpan perl modules needed by mysql webmin
+- name:  webmin | Install cpan perl modules needed by mysql webmin
   shell: "cpan {{ item }}"
   with_items:
     - DBI 
@@ -75,8 +85,7 @@
   changed_when: false
   become: yes
 
-
-- name:  jenkins-slave | Install cpan perl additional modules webmin
+- name:  webmin | Install cpan perl additional modules webmin
   shell: "cpan {{ item }}"
   with_items:
     - DDigest::MD5
@@ -88,6 +97,6 @@
 #TODO test
 #perl -e 'use Net::SSLeay' 
 
-- name: jenkins-slave | Run perl cpan check
+- name: webmin | Run perl cpan check
   shell: perl -MLWP::Simple -e 1
   when: cpan_result.changed
