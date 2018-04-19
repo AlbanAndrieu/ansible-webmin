@@ -69,7 +69,8 @@
   when: (ansible_distribution == 'FreeBSD') 
   tags: package
   with_items:
-   - p5\-DBI
+   - p5-DBI
+   - p5-DBD-mysql
   changed_when: false
 
 #TODO on Ubuntu configure cpan by hand
