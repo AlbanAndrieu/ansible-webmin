@@ -19,7 +19,7 @@
   with_items:
    - git 
    - gitweb
-   - webmin-virtualmin-git
+#   - webmin-virtualmin-git
 
 #yum install wbm-virtualmin-git
 
