@@ -9,14 +9,18 @@
 
 - name: webmin | Addkey webmin
   apt_key: url=http://www.webmin.com/jcameron-key.asc state=present
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['17.04']
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   become: yes
 
 - name: webmin | Add webmin repo
-#  apt_repository: repo='deb https://download.webmin.com/download/repository {{ansible_lsb.codename}} contrib' update_cache=yes
-  apt_repository: repo='deb https://download.webmin.com/download/repository sarge contrib' update_cache=yes
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') 
-#  and ansible_distribution_version not in ['17.04']
+
+  action: apt_repository repo="deb http://download.virtualbox.org/virtualbox/debian trusty contrib" state=present update_cache=yes
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version in ['12.04', '13.04', '14.04', '16.04']
+  become: yes
+
+- name: webmin | Add webmin repo
+  apt_repository: repo='deb https://download.webmin.com/download/repository {{ansible_lsb.codename}} contrib' state=present update_cache=yes
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_distribution_version not in ['12.04', '13.04', '14.04', '16.04']
   become: yes
 
 #- name: webmin | Add webmin mirror repo
@@ -28,7 +32,6 @@
 - name: webmin | Install webmin
   action: "{{ ansible_pkg_mgr}} name={{ item }} state={{  util_pkg_state|default('present') }} update_cache=yes" 
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')  
-#  when: ansible_distribution_version not in ['17.04']
   with_items:
    - webmin
   become: yes
