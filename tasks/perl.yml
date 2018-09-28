@@ -1,7 +1,4 @@
-
-##
- # Perl
- #
+---
 - name: webmin | Install webmin dependencies
   action: "{{ ansible_pkg_mgr}} name={{ item }} state={{  util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
@@ -13,12 +10,12 @@
    - libpam-runtime
    - libio-pty-perl
    - apt-show-versions
-   
+
 - name: webmin | Install webmin mysql dependencies
   action: "{{ ansible_pkg_mgr}} name={{ item }} state={{  util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  with_items:   
-   - libdbd-mysql-perl 
+  with_items:
+   - libdbd-mysql-perl
    - libdbi-perl
 
 - name: webmin | Install perl for running
@@ -27,7 +24,7 @@
   tags: package
   with_items:
    - perl-Env
-  become: yes
+  become: true
 
 - name: webmin | Install cpanminus (RedHat based)
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }} update_cache=yes"
@@ -35,68 +32,68 @@
   tags: package
   with_items:
    - perl-App-cpanminus
-  become: yes
+  become: true
 
 - name: webmin | Install CPAN tools needed by cpp generator (RedHat based)
   action: "{{ ansible_pkg_mgr}} name={{ item }} state={{ util_pkg_state|default('present') }}"
-  become: yes
+  become: true
   when: (ansible_distribution == 'RedHat')
   with_items:
    - perl-CPAN
 
-#export PERL_MM_USE_DEFAULT=1
-#export PERL_EXTUTILS_AUTOINSTALL="--defaultdeps"
-#sudo PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install Test::More'
+# export PERL_MM_USE_DEFAULT=1
+# export PERL_EXTUTILS_AUTOINSTALL="--defaultdeps"
+# sudo PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install Test::More'
 
-#It makes perl automatically answer "yes" when CPAN asks "Would you like to configure as much as possible automatically? [yes]"
+# It makes perl automatically answer "yes" when CPAN asks "Would you like to configure as much as possible automatically? [yes]"
 - name: webmin | Install automatically perl module PERL_MM_USE_DEFAULT
   shell: "echo $PERL_MM_USE_DEFAULT"
   environment:
-    PERL_MM_USE_DEFAULT: 1
+   PERL_MM_USE_DEFAULT: 1
 
 - name: webmin | Echo PERL_MM_USE_DEFAULT again
   shell: "echo $PERL_MM_USE_DEFAULT"
 
-- name:  webmin | Check perl
+- name: webmin | Check perl
   shell: perl -e 'use FileHandle; print $FileHandle::VERSION'
   changed_when: false
-  become: yes
+  become: true
 
-#pkg install p5\-DBI
+# pkg install p5\-DBI
 - name: webmin | Install perl modules needed by mysql webmin (Freebsd)
   pkgng: name={{ item }} state={{ util_pkg_state|default('present') }}
-  become: yes
-  when: (ansible_distribution == 'FreeBSD') 
+  become: true
+  when: (ansible_distribution == 'FreeBSD')
   tags: package
   with_items:
    - p5-DBI
    - p5-DBD-mysql
   changed_when: false
 
-#TODO on Ubuntu configure cpan by hand
-#sudo perl -MCPAN -e 'install Bundle::CPAN'
+# TODO on Ubuntu configure cpan by hand
+# sudo perl -MCPAN -e 'install Bundle::CPAN'
 
-#Below is same has above but with CPAN
-- name:  webmin | Install cpan perl modules needed by mysql webmin
+# Below is same has above but with CPAN
+- name: webmin | Install cpan perl modules needed by mysql webmin
   shell: "cpan {{ item }}"
   with_items:
-    - DBI 
-    - DBD::mysql
+   - DBI
+   - DBD::mysql
   register: cpan_result
   changed_when: false
-  become: yes
+  become: true
 
-- name:  webmin | Install cpan perl additional modules webmin
+- name: webmin | Install cpan perl additional modules webmin
   shell: "cpan {{ item }}"
   with_items:
-    - DDigest::MD5
-    - Net::SSLeay
+   - DDigest::MD5
+   - Net::SSLeay
   register: cpan_result
   changed_when: false
-  become: yes
+  become: true
 
-#TODO test
-#perl -e 'use Net::SSLeay' 
+# TODO test
+# perl -e 'use Net::SSLeay'
 
 - name: webmin | Run perl cpan check
   shell: perl -MLWP::Simple -e 1

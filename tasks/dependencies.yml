@@ -1,4 +1,4 @@
-
+---
 - name: webmin | Install webmin mandatory dependencies
   action: "{{ ansible_pkg_mgr}} name={{ item }} state={{  util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
@@ -17,35 +17,35 @@
   action: "{{ ansible_pkg_mgr}} name={{ item }} state={{  util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   with_items:
-   - git 
+   - git
    - gitweb
 #   - webmin-virtualmin-git
 
-#yum install wbm-virtualmin-git
+# yum install wbm-virtualmin-git
 
-#TODO install Webmin module 
-#See http://www.webmin.com/cgi-bin/search_third.cgi?search=awstats
-#http://download.webmin.com/download/plugins/virtualmin-git.wbm.gz
-#http://downloads.sourceforge.net/project/awstats/AWStats%20Webmin%20module/2.0/awstats-2.0.wbm
+# TODO install Webmin module
+# See http://www.webmin.com/cgi-bin/search_third.cgi?search=awstats
+# http://download.webmin.com/download/plugins/virtualmin-git.wbm.gz
+# http://downloads.sourceforge.net/project/awstats/AWStats%20Webmin%20module/2.0/awstats-2.0.wbm
 
-#http://labs.libre-entreprise.org/frs/download.php/899/wbmclamav-0.16.wbm.gz
-#http://www.webmin.com/download/modules/disk-usage-1.2.wbm.gz
+# http://labs.libre-entreprise.org/frs/download.php/899/wbmclamav-0.16.wbm.gz
+# http://www.webmin.com/download/modules/disk-usage-1.2.wbm.gz
 
 - name: webmin | Install virtualmin mandatory dependencies
   action: "{{ ansible_pkg_mgr}} name={{ item }} state={{  util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   with_items:
    - libapache2-mod-fcgid
-   
-#See http://www.webmin.com/vinstall.html
-#wget http://software.virtualmin.com/gpl/scripts/install.sh
-#chmod +x install.sh
-#sudo ./install.sh
 
-#See http://www.webmin.com/cinstall-kvm.html
-#wget http://cloudmin.virtualmin.com/gpl/scripts/cloudmin-kvm-debian-install.sh
-#chmod +x cloudmin-kvm-debian-install.sh
-#sudo ./cloudmin-kvm-debian-install.sh
+# See http://www.webmin.com/vinstall.html
+# wget http://software.virtualmin.com/gpl/scripts/install.sh
+# chmod +x install.sh
+# sudo ./install.sh
 
-#sudo apt-get install samba krb5-user libpam-krb5 ntpdate winbind
-#sudo apt-get install samba krb5-config krb5-user winbind libpam-winbind libnss-winbind
+# See http://www.webmin.com/cinstall-kvm.html
+# wget http://cloudmin.virtualmin.com/gpl/scripts/cloudmin-kvm-debian-install.sh
+# chmod +x cloudmin-kvm-debian-install.sh
+# sudo ./cloudmin-kvm-debian-install.sh
+
+# sudo apt-get install samba krb5-user libpam-krb5 ntpdate winbind
+# sudo apt-get install samba krb5-config krb5-user winbind libpam-winbind libnss-winbind

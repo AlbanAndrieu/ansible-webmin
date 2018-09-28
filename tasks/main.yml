@@ -1,10 +1,8 @@
 ---
-# This playbook contains common plays that will be run on all nodes.
-
 - import_tasks: webmin.yml
-  when: webmin_enabled 
+  when: webmin_enabled
   tags: [webmin]
-  
+
 - name: Copy Dockerfile
   template: src=Dockerfile.j2 dest={{ docker_files_generated_directory }}/Dockerfile mode=0777
   when: docker_files_enable

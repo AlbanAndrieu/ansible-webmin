@@ -1,15 +1,15 @@
 ---
-webmin_enabled: yes                       # Enable module
+webmin_enabled: true                       # Enable module
 
 webmin_base_dir: "/usr/share/webmin"
 
-webmin_repo_files :
+webmin_repo_files:
   - "webmin_mirror_somersettechsolutions_co_uk_repository.list"
 
 util_pkg_state: present
 
 docker_files_generated_directory: "./"
-docker_files_enable: no
+docker_files_enable: false
 docker_volume_directory: "{{ webmin_base_dir }}"
 docker_working_directory: "/home/vagrant"
 docker_image_name: "nabla/ansible-webmin"

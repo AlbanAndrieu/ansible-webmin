@@ -3,8 +3,4 @@
   become: true
 
   roles:
-    - { role: ./,
-        docker_files_enable: yes
-      }
-
-#- include: docker/integration-tests.yml
+    - { role: ./, docker_files_enable: true }
