@@ -35,7 +35,7 @@ script:
   - ansible-playbook --syntax-check -i ./hosts -vvvv ./webmin.yml --connection=local -e "python_versions=[2.7]"
 
   # Molecule test
-  - molecule test
+  # - molecule test
 
   # First run
   # Run the role/playbook with ansible-playbook.
