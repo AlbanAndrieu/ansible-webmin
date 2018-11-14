@@ -37,7 +37,7 @@
 - name: webmin | Install CPAN tools needed by cpp generator (RedHat based)
   action: "{{ ansible_pkg_mgr}} name={{ item }} state={{ util_pkg_state|default('present') }}"
   become: true
-  when: (ansible_distribution == 'RedHat')
+  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
   with_items:
    - perl-CPAN
 
