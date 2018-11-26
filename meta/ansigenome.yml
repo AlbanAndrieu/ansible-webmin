@@ -1,32 +1,10 @@
 ---
-dependencies: []
-
-galaxy_info:
-  author: Alban Andrieu
-  description: A role for installing webmin
-  company: Nabla
-  license: Apache
-  min_ansible_version: 2.3.1.0
-  platforms:
-    - name: Ubuntu
-      versions:
-        - all
-        - lucid
-        - maverick
-        - natty
-        - oneiric
-        - precise
-        - quantal
-        - raring
-        - saucy
-        - trusty
-  categories:
-    - system
-
 ansigenome_info:
   galaxy_id: '1173'
+  galaxy_url: 'https://galaxy.ansible.com/alban.andrieu/webmin/'
   galaxy_user: 'alban.andrieu'
   galaxy_name: 'webmin'
+  galaxy_docker_name: 'ansible-webmin'
 
   travis: true
 
@@ -43,6 +21,8 @@ ansigenome_info:
 
   usage: |
     Describe how to use in more detail...
+
+    `ansible-playbook -i hosts -c local -v webmin.yml -vvvv --ask-sudo-pass | tee setup.log`
 
   # custom: |
   #   Any custom output you want after the usage section..
