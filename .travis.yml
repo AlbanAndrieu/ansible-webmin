@@ -1,6 +1,11 @@
 ---
 language: python
-python: "3.6"
+python:
+#  - 2.7
+#  - 3.3
+#  - 3.4
+#  - 3.5
+  - 3.6
 services:
   - docker
 cache:
@@ -8,46 +13,61 @@ cache:
   directories:
     - $HOME/.cache/pip
 env:
-  - ANSIBLE_VERSION=latest
-  - ANSIBLE_VERSION=2.4.1.0
-
+  global:
+    - JENKINS_HOME=/home/jenkins
+    - JENKINS_UID=3000
+    - DOCKER_GID=999
+    - secure: MD73NCVzctbVmi2QnQtwtH/ISXN2K0alsLbixoaXl7gr3XvTB4sYB0u+KKtPV46jbeAlQqTRObPfQouPrsLsiNDYcpuN0I5bKsn3TTs4ZHIkD0I2Q9Wh3qNM2fYf9mw3ZUhvXVTEod0W7jzkVGb6kitRCJj8rioKKzvE/YdVsG4=
+  matrix:
+#  - ANSIBLE_VERSION=latest
+    - ANSIBLE_VERSION=2.7.2
 sudo: required
 dist: trusty
-
-virtualenv:
-  system_site_packages: false
-
 branches:
   only:
-    - master
-
+  - master
+virtualenv:
+  system_site_packages: false
 before_install:
   - sudo apt-get update -qq
+  - sudo apt-get install curl
   - sudo apt-get install -qq python-apt python-pycurl
 install:
   # Install Ansible.
   - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible; else pip install ansible==$ANSIBLE_VERSION; fi
   - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible-lint; fi
 
+  # Add ansible.cfg to pick up roles path.
+  - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
+
+  # Prepare tests
+  # Add user jenkins to the image (travis is 2000)
+  - id -a
+  - getent passwd 3000 || true # 3000 not found we can use it for jenkins user
+#  - groupadd -g ${DOCKER_GID} docker && \
+#  - sudo adduser --quiet --disabled-password --shell /bin/bash --uid ${JENKINS_UID} --gid ${DOCKER_GID} --home ${JENKINS_HOME} --gecos "Jenkins" jenkins
+  # Set password for the jenkins user (you may want to alter this).
+#  - sudo echo "jenkins:jenkins1234" | sudo chpasswd
+
   - pip install molecule
 script:
   # Check ansible version
   - ansible --version
 
-  # Check the role/playbook's syntax.
-  - ansible-playbook --syntax-check -i ./hosts -vvvv ./webmin.yml --connection=local -e "python_versions=[2.7]"
+  # Check syntax
+  - ansible-playbook -i ./hosts --syntax-check ./webmin.yml -vvvv --connection=local -e "python_versions=[2.7]"
 
   # Molecule test
   # - molecule test
 
   # First run
   # Run the role/playbook with ansible-playbook.
-  - ansible-playbook -i ./hosts ./webmin.yml --connection=local --sudo -vvvv -e "python_versions=[2.7]"
+  - ansible-playbook -i ./hosts ./webmin.yml --connection=local -vvvv -e "python_versions=[2.7]"
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
   email:
     recipients:
-      - alban.andrieu@free.fr
-    on_success: [always|never|change]  # default: change
-    on_failure: [always|never|change]  # default: always
+      - alban.andrieu@nabla.mobi
+    on_success: [always|never|change]         # default: change
+    on_failure: [always|never|change]         # default: always
