@@ -1,6 +1,6 @@
 ---
 - name: webmin | Install webmin dependencies
-  action: "{{ ansible_pkg_mgr}} name={{ item }} state={{  util_pkg_state|default('present') }}"
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{  util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   with_items:
    - perl
@@ -12,7 +12,7 @@
    - apt-show-versions
 
 - name: webmin | Install webmin mysql dependencies
-  action: "{{ ansible_pkg_mgr}} name={{ item }} state={{  util_pkg_state|default('present') }}"
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{  util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   with_items:
    - libdbd-mysql-perl
@@ -35,7 +35,7 @@
   become: true
 
 - name: webmin | Install CPAN tools needed by cpp generator (RedHat based)
-  action: "{{ ansible_pkg_mgr}} name={{ item }} state={{ util_pkg_state|default('present') }}"
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   become: true
   when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
   with_items:
@@ -54,6 +54,18 @@
 - name: webmin | Echo PERL_MM_USE_DEFAULT again
   shell: "echo $PERL_MM_USE_DEFAULT"
 
+# TODO below is hanging the first time it is run
+# Manually install CPAN if so
+
+# WARNING firs time it might ask for Please enter the URL of your CPAN mirror
+# perl -MCPAN -eshell
+# Enter http://www.cpan.org
+# o conf commit
+# commit: wrote '/usr/share/perl5/CPAN/Config.pm'
+
+# TODO on Ubuntu configure cpan by hand
+# sudo perl -MCPAN -e 'install Bundle::CPAN'
+
 - name: webmin | Check perl
   shell: perl -e 'use FileHandle; print $FileHandle::VERSION'
   changed_when: false
@@ -70,9 +82,6 @@
    - p5-DBD-mysql
   changed_when: false
 
-# TODO on Ubuntu configure cpan by hand
-# sudo perl -MCPAN -e 'install Bundle::CPAN'
-
 # Below is same has above but with CPAN
 - name: webmin | Install cpan perl modules needed by mysql webmin
   shell: "cpan {{ item }}"
@@ -83,6 +92,20 @@
   changed_when: false
   become: true
 
+- name: webmin | Install ssl for Net::SSLeay
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
+  become: true
+  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
+  with_items:
+   - openssl-devel
+
+- name: webmin | Install ssl for Net::SSLeay
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
+  become: true
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  with_items:
+   - libssl-dev
+   
 - name: webmin | Install cpan perl additional modules webmin
   shell: "cpan {{ item }}"
   with_items:
