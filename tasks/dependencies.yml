@@ -1,12 +1,12 @@
 ---
 - name: webmin | Install webmin mandatory dependencies
-  action: "{{ ansible_pkg_mgr}} name={{ item }} state={{  util_pkg_state|default('present') }}"
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{  util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   with_items:
    - apt-transport-https
 
 - name: webmin | Install webmin optional dependencies
-  action: "{{ ansible_pkg_mgr}} name={{ item }} state={{  util_pkg_state|default('present') }}"
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{  util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   with_items:
    - webalizer
@@ -14,7 +14,7 @@
    - fail2ban
 
 - name: webmin | Install webmin other dependencies
-  action: "{{ ansible_pkg_mgr}} name={{ item }} state={{  util_pkg_state|default('present') }}"
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{  util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   with_items:
    - git
@@ -32,7 +32,7 @@
 # http://www.webmin.com/download/modules/disk-usage-1.2.wbm.gz
 
 - name: webmin | Install virtualmin mandatory dependencies
-  action: "{{ ansible_pkg_mgr}} name={{ item }} state={{  util_pkg_state|default('present') }}"
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{  util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   with_items:
    - libapache2-mod-fcgid
